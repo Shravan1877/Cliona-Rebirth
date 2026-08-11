@@ -1,0 +1,14 @@
+fastapi
+uvicorn[standard]
+langgraph
+langgraph-checkpoint-postgres
+sqlalchemy[asyncio]
+asyncpg
+pgvector
+sentence-transformers
+langchain-openai
+python-jose[cryptography]
+alembic
+pydantic-settings
+pytest
+numpy

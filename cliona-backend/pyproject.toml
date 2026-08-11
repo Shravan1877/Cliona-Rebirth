@@ -1,0 +1,5 @@
+[project]
+name = "cliona-backend"
+version = "0.1.0"
+description = "Cliona backend"
+requires-python = ">=3.11"

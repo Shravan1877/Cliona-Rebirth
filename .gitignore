@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Env files (never commit real secrets)
+.env
+.env.*
+!.env.example
+
+# Alembic
+*.sqlite3
+
+# OS/editor
+.DS_Store
