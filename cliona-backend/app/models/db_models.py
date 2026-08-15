@@ -13,6 +13,7 @@ from sqlalchemy import (
     DateTime,
     Float,
     ForeignKey,
+    Index,
     Integer,
     Text,
     UniqueConstraint,
@@ -35,6 +36,11 @@ class User(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now())
 
+    __table_args__ = (
+        Index("idx_users_clerk_id", "clerk_id"),
+        Index("idx_users_email", "email"),
+    )
+
 
 class Conversation(Base):
     __tablename__ = "conversations"
@@ -46,6 +52,11 @@ class Conversation(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now())
     last_message_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    __table_args__ = (
+        Index("idx_conversations_user_id", "user_id"),
+        Index("idx_conversations_updated_at", updated_at.desc()),
+    )
 
 
 class Message(Base):
@@ -65,7 +76,13 @@ class Message(Base):
     tokens_used = Column(Integer)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
-    __table_args__ = (CheckConstraint("role IN ('user', 'assistant')", name="messages_role_check"),)
+    __table_args__ = (
+        CheckConstraint("role IN ('user', 'assistant')", name="messages_role_check"),
+        Index("idx_messages_conversation_id", "conversation_id"),
+        Index("idx_messages_user_id", "user_id"),
+        Index("idx_messages_created_at", created_at.desc()),
+        Index("idx_messages_embedding", embedding, postgresql_using="hnsw", postgresql_ops={"embedding": "vector_cosine_ops"}),
+    )
 
 
 class UserFact(Base):
@@ -84,6 +101,9 @@ class UserFact(Base):
 
     __table_args__ = (
         UniqueConstraint("user_id", "subject", "predicate", "object", name="user_facts_unique"),
+        Index("idx_user_facts_user_id", "user_id"),
+        Index("idx_user_facts_active", "user_id", postgresql_where=(is_active == True)),  # noqa: E712
+        Index("idx_user_facts_predicate", "predicate"),
     )
 
 
@@ -99,3 +119,5 @@ class SessionState(Base):
     pending_persona = Column(Text)
     last_3_messages = Column(JSONB)  # [B2] holds 6 entries (3 turns), sliced [-6:]
     updated_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    __table_args__ = (Index("idx_session_state_user_id", "user_id"),)
