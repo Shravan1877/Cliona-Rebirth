@@ -65,11 +65,16 @@ async def _run_upsert_then_lookup_check() -> None:
     clerk_id = f"user_test_{int(time.time())}_{id(object())}"
     token, jwk_dict = _make_test_token(clerk_id)
 
-    async def fake_refresh(self) -> None:
-        self._keys = {"test-kid": jwk_dict}
+    # Patch only this instance's _refresh, not the JWKSCache class — a class-level
+    # patch would leak into other tests in the same pytest session (e.g. the live
+    # JWKS integration test) that construct their own JWKSCache() instances.
+    test_cache = auth.JWKSCache()
 
-    auth.JWKSCache._refresh = fake_refresh
-    auth._jwks_cache = auth.JWKSCache()
+    async def fake_refresh() -> None:
+        test_cache._keys = {"test-kid": jwk_dict}
+
+    test_cache._refresh = fake_refresh
+    auth._jwks_cache = test_cache
     auth._user_id_cache.clear()
 
     await _delete_test_row(clerk_id)  # clean slate in case of a leftover from a prior aborted run
