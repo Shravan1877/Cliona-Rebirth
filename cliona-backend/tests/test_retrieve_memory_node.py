@@ -59,8 +59,8 @@ async def main() -> None:
     print("\nPASS: top result is exam/calculus-related, ordering is correct, inactive fact correctly excluded")
 
 
-def test_retrieve_memory_node_against_fixture_data() -> None:
-    asyncio.run(main())
+async def test_retrieve_memory_node_against_fixture_data() -> None:
+    await main()
 
 
 if __name__ == "__main__":

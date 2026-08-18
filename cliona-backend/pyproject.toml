@@ -3,3 +3,13 @@ name = "cliona-backend"
 version = "0.1.0"
 description = "Cliona backend"
 requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+# All async tests/fixtures share one event loop for the whole pytest session,
+# so the module-level engine in app/core/database.py (created once at import,
+# before any loop exists) only ever binds its connection pool to a single
+# loop — the "different loop" asyncpg error this fixes comes from each test
+# otherwise getting its own asyncio.run() loop.
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
+asyncio_default_test_loop_scope = "session"

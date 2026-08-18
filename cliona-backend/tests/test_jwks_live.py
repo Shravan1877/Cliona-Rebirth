@@ -87,8 +87,8 @@ async def _run_all() -> None:
 
 
 @pytest.mark.integration
-def test_live_clerk_jwks_integration() -> None:
-    asyncio.run(_run_all())
+async def test_live_clerk_jwks_integration() -> None:
+    await _run_all()
 
 
 if __name__ == "__main__":

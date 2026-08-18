@@ -12,4 +12,5 @@ httpx
 alembic
 pydantic-settings
 pytest
+pytest-asyncio
 numpy

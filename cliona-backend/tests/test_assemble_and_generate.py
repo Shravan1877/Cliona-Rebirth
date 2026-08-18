@@ -126,5 +126,9 @@ async def main() -> None:
         print("usage_metadata:", getattr(raw, "usage_metadata", None))
 
 
+async def test_assemble_prompt_and_generate_node() -> None:
+    await main()
+
+
 if __name__ == "__main__":
     asyncio.run(main())

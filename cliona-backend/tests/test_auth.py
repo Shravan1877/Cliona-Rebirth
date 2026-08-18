@@ -104,8 +104,8 @@ async def _run_upsert_then_lookup_check() -> None:
         await _delete_test_row(clerk_id)
 
 
-def test_get_current_user_resolves_stable_internal_uuid() -> None:
-    asyncio.run(_run_upsert_then_lookup_check())
+async def test_get_current_user_resolves_stable_internal_uuid() -> None:
+    await _run_upsert_then_lookup_check()
 
 
 if __name__ == "__main__":

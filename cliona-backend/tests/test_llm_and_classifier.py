@@ -102,10 +102,10 @@ async def check_llm() -> None:
     assert response.content, "expected a non-empty response from OpenRouter"
 
 
-def test_prompts_classifier_and_llm() -> None:
+async def test_prompts_classifier_and_llm() -> None:
     check_prompts_json()
     check_classifier()
-    asyncio.run(check_llm())
+    await check_llm()
 
 
 if __name__ == "__main__":
