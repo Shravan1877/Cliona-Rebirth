@@ -1,10 +1,15 @@
 """get_embedding() + classify_intent(), backed by all-MiniLM-L6-v2 (§6.2).
 
-The model and seed persona embeddings are loaded lazily, not at import
-time — Phase 1 must not trigger a model download or inference.
+The model loads once at import time and the 8 persona seed embeddings are
+precomputed and cached at module load — matching the "0ms lookup, loaded
+once" pattern the rest of the static assets follow (§11.3). This module is
+CPU-bound local inference, so it's sync, not async (§11.4).
 """
 
 from typing import Optional
+
+import numpy as np
+from sentence_transformers import SentenceTransformer
 
 PERSONA_SEED_TEXT = {
     "casual": "casual chat, random things",
@@ -19,22 +24,26 @@ PERSONA_SEED_TEXT = {
 
 CLASSIFICATION_THRESHOLD = 0.3
 
-_model = None
-PERSONA_EMBEDDINGS: dict = {}
+_model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 
-
-def _load_model():
-    """Lazily load the shared all-MiniLM-L6-v2 SentenceTransformer. Not called in Phase 1."""
-    raise NotImplementedError("Phase 1")
+PERSONA_EMBEDDINGS: dict = {
+    key: _model.encode(text) for key, text in PERSONA_SEED_TEXT.items()
+}
 
 
 def get_embedding(text: str):
     """384d embedding via all-MiniLM-L6-v2."""
-    raise NotImplementedError("Phase 1")
+    return _model.encode(text)
 
 
 def classify_intent(text: str) -> Optional[str]:
     """Returns one of the 8 persona keys, or None if no persona clears
     the 0.3 threshold. Does NOT fall back to "casual" (§6.2, [B1]).
     """
-    raise NotImplementedError("Phase 1")
+    emb = _model.encode(text)
+    best, best_score = None, -1.0
+    for key, p_emb in PERSONA_EMBEDDINGS.items():
+        sim = np.dot(emb, p_emb) / (np.linalg.norm(emb) * np.linalg.norm(p_emb))
+        if sim > best_score:
+            best_score, best = sim, key
+    return best if best_score > CLASSIFICATION_THRESHOLD else None

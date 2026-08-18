@@ -11,7 +11,7 @@ class Settings(BaseSettings):
 
     # OpenRouter
     OPENROUTER_API_KEY: str
-    LLM_MODEL_ID: str = "nvidia/nemotron-3-ultra-550b-a55b:free"
+    LLM_MODEL_ID: str = "nvidia/nemotron-3.5-lightning:free"
 
     # Clerk
     CLERK_SECRET_KEY: str
