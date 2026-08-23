@@ -38,7 +38,7 @@ Fixed decisions. Not options.
 | Orchestration | LangGraph | 3-node state machine (§4) |
 | LLM gateway | OpenRouter (via `langchain_openai.ChatOpenAI` with `base_url="https://openrouter.ai/api/v1"`) | Only gateway. No direct provider SDKs. |
 | LLM — dev | `nvidia/nemotron-3-ultra-550b-a55b:free` | **`[B15]` Verify this slug resolves against the OpenRouter catalog before first deploy.** |
-| LLM — prod | `qwen/qwen-3.7-flash` | **`[B15]` Verify this slug resolves against the OpenRouter catalog before first deploy.** |
+| LLM — prod | `qwen/qwen3.7-flash` | **`[B15]` Verify this slug resolves against the OpenRouter catalog before first deploy.** |
 | LLM params | `temperature=0.85`, `max_tokens=1024`, `timeout=60` | Fixed |
 | Database | Supabase (PostgreSQL 15+) | Extensions: `pgvector`, `uuid-ossp` |
 | DB access | SQLAlchemy async + `asyncpg` | `create_async_engine`, `async_sessionmaker` |
