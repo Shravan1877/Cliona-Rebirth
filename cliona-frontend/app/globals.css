@@ -1,0 +1,179 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant data-open (&:where([data-state="open"], [data-open]:not([data-open="false"])));
+@custom-variant data-closed (&:where([data-state="closed"], [data-closed]:not([data-closed="false"])));
+
+@theme inline {
+  @keyframes collapsible-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-collapsible-content-height, var(--collapsible-panel-height, auto));
+    }
+  }
+  @keyframes collapsible-up {
+    from {
+      height: var(--radix-collapsible-content-height, var(--collapsible-panel-height, auto));
+    }
+    to {
+      height: 0;
+    }
+  }
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-ibm-plex-mono);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-highlight: var(--highlight);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: 1.5rem;
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 3%), 0 8px 20px rgb(0 0 0 / 4%);
+  --animate-shimmer: shimmer-sweep var(--shimmer-duration, 1000ms) linear infinite both;
+  @keyframes shimmer-sweep {
+    from {
+      background-position: 150% 0;
+    }
+    to {
+      background-position: -100% 0;
+    }
+  }
+}
+
+/*
+ * CLAUDE.md §10.4 — Warm · Calm · Curious · Technical · Minimal · Playful ·
+ * Organic. Parchment/midnight ground, #39AAAA identical across themes (brand
+ * recognition), #F59E42/#F7941D reserved for sparing use (thinking
+ * indicator, key CTAs) — never a general accent color, per §10.4's own
+ * "sparingly" note.
+ */
+:root {
+  --radius: 1rem;
+  --background: oklch(0.98 0.012 85);
+  --foreground: oklch(0.22 0.006 60);
+  --card: oklch(0.995 0.006 85);
+  --card-foreground: oklch(0.22 0.006 60);
+  --popover: oklch(0.995 0.006 85);
+  --popover-foreground: oklch(0.22 0.006 60);
+  --primary: oklch(0.62 0.086 195);
+  --primary-foreground: oklch(0.99 0.005 195);
+  --secondary: oklch(0.955 0.014 80);
+  --secondary-foreground: oklch(0.22 0.006 60);
+  --muted: oklch(0.955 0.014 80);
+  --muted-foreground: oklch(0.5 0.02 65);
+  --accent: oklch(0.93 0.018 80);
+  --accent-foreground: oklch(0.22 0.006 60);
+  --destructive: oklch(0.577 0.19 25);
+  --border: oklch(0.22 0.006 60 / 7%);
+  --input: oklch(0.22 0.006 60 / 10%);
+  --ring: oklch(0.62 0.086 195);
+  --sidebar: oklch(0.965 0.013 82);
+  --sidebar-foreground: oklch(0.22 0.006 60);
+  --highlight: oklch(0.74 0.15 55);
+  --chart-1: oklch(0.62 0.086 195);
+  --chart-2: oklch(0.74 0.15 55);
+  --chart-3: oklch(0.6 0.118 184.704);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+}
+
+.dark {
+  --background: oklch(0.17 0.035 268);
+  --foreground: oklch(0.93 0.03 200);
+  --card: oklch(0.21 0.035 268);
+  --card-foreground: oklch(0.93 0.03 200);
+  --popover: oklch(0.21 0.035 268);
+  --popover-foreground: oklch(0.93 0.03 200);
+  --primary: oklch(0.62 0.086 195);
+  --primary-foreground: oklch(0.13 0.03 268);
+  --secondary: oklch(0.25 0.033 267);
+  --secondary-foreground: oklch(0.93 0.03 200);
+  --muted: oklch(0.25 0.033 267);
+  --muted-foreground: oklch(0.68 0.03 235);
+  --accent: oklch(0.28 0.035 265);
+  --accent-foreground: oklch(0.93 0.03 200);
+  --destructive: oklch(0.65 0.2 22);
+  --border: oklch(0.93 0.03 200 / 8%);
+  --input: oklch(0.93 0.03 200 / 12%);
+  --ring: oklch(0.62 0.086 195);
+  --sidebar: oklch(0.145 0.032 268);
+  --sidebar-foreground: oklch(0.93 0.03 200);
+  --highlight: oklch(0.74 0.15 55);
+  --chart-1: oklch(0.62 0.086 195);
+  --chart-2: oklch(0.74 0.15 55);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  :root {
+    color-scheme: light;
+  }
+
+  :root.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-optical-sizing: auto;
+    position: relative;
+    transition:
+      background-color 400ms ease,
+      color 400ms ease;
+  }
+
+  /* Barely-visible paper grain, both modes — a static SVG noise layer kept
+     under 4% opacity so it never reads as texture, only as "not flat". */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  ::selection {
+    background-color: oklch(0.62 0.086 195 / 25%);
+  }
+}

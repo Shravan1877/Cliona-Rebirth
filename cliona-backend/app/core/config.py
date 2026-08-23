@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     # Server
     ENVIRONMENT: str = "development"
     LOG_LEVEL: str = "INFO"
+    FRONTEND_ORIGIN: str = "http://localhost:3000"
 
     class Config:
         env_file = ".env"

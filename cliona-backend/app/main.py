@@ -3,8 +3,10 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import chat, conversations, health
+from app.core.config import settings
 from app.graph import nodes
 
 STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
@@ -48,6 +50,14 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Cliona", lifespan=lifespan)
+
+# Browser frontend calls /v1/chat directly (no proxy hop) — needs CORS.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[settings.FRONTEND_ORIGIN],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(health.router)
 app.include_router(chat.router)
